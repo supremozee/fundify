@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.white-eclipse-bg {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%222050%22%20height%3D%222053%22%20viewBox%3D%220%200%202050%202053%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20filter%3D%22url(%23filter0_f_29_95)%22%3E%3Cellipse%20cx%3D%221025%22%20cy%3D%221026.5%22%20rx%3D%22400%22%20ry%3D%22401.5%22%20fill%3D%22%23F3F9F8%22/%3E%3C/g%3E%3Cdefs%3E%3Cfilter%20id%3D%22filter0_f_29_95%22%20x%3D%220%22%20y%3D%220%22%20width%3D%222050%22%20height%3D%222053%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22SourceGraphic%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22shape%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%22312.5%22%20result%3D%22effect1_foregroundBlur_29_95%22/%3E%3C/filter%3E%3C/defs%3E%3C/svg%3E");
+  background-size: 2000px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+/* .oval-bg-1 {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%22634%22%20height%3D%22833%22%20viewBox%3D%220%200%20634%20833%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M190.86%20822.379C110.869%20797.594%2052.4661%20729.76%2022.7436%20640.035C-6.97865%20550.311%20-8.00289%20438.738%2026.7457%20326.59C61.4943%20214.442%20125.424%20122.994%20200.67%2065.7946C275.917%208.59421%20362.442%20-14.3347%20442.434%2010.4505C522.425%2035.2356%20580.828%20103.07%20610.551%20192.795C640.273%20282.518%20641.297%20394.092%20606.548%20506.24C571.8%20618.387%20507.87%20709.835%20432.624%20767.035C357.377%20824.235%20270.852%20847.164%20190.86%20822.379Z%22%20stroke%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  background-size: 30rem;
+  background-repeat: no-repeat;
+  background-position: 400px -90px;
+}
+
+.oval-bg-2 {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%221177%22%20height%3D%22649%22%20viewBox%3D%220%200%201177%20649%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M1169.01%20520.558C1157.05%20555.971%201129.44%20584.271%201089.69%20605.109C1049.94%20625.948%20998.073%20639.308%20937.647%20644.839C816.794%20655.902%20661.812%20635.644%20501.359%20581.42C340.905%20527.196%20205.405%20449.288%20116.038%20367.183C71.3536%20326.131%2038.2208%20284.045%2019.2597%20243.364C0.300129%20202.687%20-4.47849%20163.443%207.4888%20128.031C19.4561%2092.6184%2047.0607%2064.3181%2086.8088%2043.4804C126.56%2022.6411%20178.43%209.28146%20238.857%203.75002C359.709%20-7.31273%20514.691%2012.9455%20675.145%2067.1695C835.599%20121.393%20971.099%20199.301%201060.47%20281.406C1105.15%20322.458%201138.28%20364.544%201157.24%20405.225C1176.2%20445.902%201180.98%20485.146%201169.01%20520.558Z%22%20stroke%3D%22black%22/%3E%3C/svg%3E");
+  background-size: 50rem;
+  background-repeat: no-repeat;
+  background-position: -60px 100px;
+} */
