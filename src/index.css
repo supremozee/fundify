@@ -12,7 +12,13 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto Serif', serif;
+}
+.gradient-text {
+  background: linear-gradient(97.21deg, #1FAA59 12.04%, #1E3A8A 93.41%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* .oval-bg-1 {

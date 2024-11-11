@@ -8,7 +8,7 @@ const Navbar = () => {
     <nav className="mx-14 p-4">
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center gap-8">
-          <div className="text-2xl font-bold">FUNDIFY</div>
+          <div className="text-2xl font-bold gradient-text">FUNDIFY</div>
           <ul className="flex space-x-8">
             <li className="relative group">
               <button className="hover:text-gray-200 flex justify-center items-center gap-1">

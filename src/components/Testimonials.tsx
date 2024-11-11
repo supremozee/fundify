@@ -3,7 +3,7 @@ import Hishamaru from "../assets/hishamaru.png";
 
 const Testimonials = () => {
   return (
-    <div className="mx-16 mt-6 pb-6">
+    <div className="mx-16 mt-32 pb-6">
       <div className="border mx-4">
         <div className="grid grid-cols-3">
           <div className="flex flex-col px-4 py-10 text-2xl border-r">

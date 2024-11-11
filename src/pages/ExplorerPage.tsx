@@ -10,7 +10,7 @@ type Project = {
   projectCount: number;
   fundingAmount: string;
   status: string;
-  variant: "elections" | "quantum"; // Instead of theme, we'll use specific variants
+  variant: "elections" | "quantum"; 
 };
 
 const ExplorerPage = () => {
