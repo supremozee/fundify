@@ -13,7 +13,7 @@ const HeroSection = () => {
         <div className="flex">
           <div className="text-4xl">{"}"}</div>
           <div className="ml-4">
-            <p>
+            <p className="w-[418px] text-[20px] leading-normal">
               Fundify Grants 24 is live! Explore rounds across our Open Source
               Software Program and rounds from our Community
             </p>
