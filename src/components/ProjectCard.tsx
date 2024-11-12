@@ -10,6 +10,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, amount, contributors, coverImage, profileImage }) => {
+  const isDashboard = window.location.pathname === '/dashboard';
   return (
     <div className="border rounded-[20px] h-[456px] max-w-[319px] relative">
       <img src={coverImage} alt={title} className="w-full h-32 object-cover rounded-t-lg" />
@@ -19,12 +20,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, amount, c
         <p className="text-sm text-gray-700 mt-2">{description}</p>
         <hr className='text-[#CFCDCD] mt-20'/>
         <div className="flex justify-between items-center mt-4">
-          <span className="text-sm font-semibold">{amount}</span>
+        { !isDashboard&& <span className="text-sm font-semibold">{amount}</span>}
         </div>
-        <div className='flex w-full justify-between items-center'>
+        {
+          isDashboard? (
+            <div className="flex justify-end w-full">
+              <button className="bg-[#1E3A8A] text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                View Details
+              </button>
+            </div>
+          ):(
+            <div className='flex w-full justify-between items-center'>
           <p className="text-sm text-gray-500">{contributors} total raised by 5 contributors</p>
           <img src='/cart.png' width={44} height={44} className='bg-cover object-cover'/>
         </div>
+          )
+        }
       </div>
     </div>
   );
