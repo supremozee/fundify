@@ -33,6 +33,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col gap-[110px] justify-center items-start space-x-8 p-[96px] bg-gray-50 min-h-screen">
         <section className='flex w-full items-center justify-center'>
         <div className="relative w-full h-40 flex ">
@@ -113,6 +114,7 @@ const Dashboard: React.FC = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
