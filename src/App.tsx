@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import ExplorerSlug from "./components/ExplorerSlug";
 import BuilderPage from "./components/Builder";
 import ExplorerPage from "./pages/ExplorerPage";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/explorer" element={<ExplorerSlug/>} />
         <Route path="/builder" element={<BuilderPage/>} />
         <Route path="/explorer" element={<ExplorerPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

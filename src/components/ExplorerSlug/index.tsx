@@ -1,4 +1,4 @@
-import ProjectCard from "./Card";
+import ProjectCard from "../ProjectCard";
 import ProjectTabs from "./Tab";
 
 const projects = [
