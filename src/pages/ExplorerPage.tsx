@@ -15,7 +15,6 @@ type Project = {
 
 const ExplorerPage = () => {
   const [activeTab, setActiveTab] = useState("home");
-
   const tabs = [
     { id: "home", label: "Home" },
     { id: "rounds", label: "Explore rounds" },
@@ -33,6 +32,7 @@ const ExplorerPage = () => {
       fundingAmount: "215,988 USDC",
       status: "Quadratic Funding",
       variant: "elections",
+      
     },
     {
       id: "2",
@@ -118,7 +118,7 @@ const ExplorerPage = () => {
         </nav>
         <div className="border-b-4 border-white -mt-1 flex" />
       </div>
-      {activeTab === "home" && <ExplorerHomeTab projects={mockProjects} />}
+      {activeTab === "home" && <ExplorerHomeTab projects={mockProjects}  />}
     </div>
   );
 };

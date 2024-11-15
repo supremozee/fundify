@@ -1,4 +1,5 @@
 import ProjectCard from "../ProjectCard";
+import TopBar2 from "../TopBar2";
 import ProjectTabs from "./Tab";
 
 const projects = [
@@ -30,6 +31,8 @@ const projects = [
 
 const ExplorerSlug = () => {
   return (
+    <>
+      <TopBar2 />
       <main className=" mx-auto p-[98px] flex justify-center flex-col items-center">
             <section className="my-8">
             <h2 className="text-[32px] font-medium text-[#2D2B2B] w-full">US 2024 Elections - Your Choice, Your Vote - Satire
@@ -86,6 +89,7 @@ const ExplorerSlug = () => {
           ))}
         </div>
       </main>
+    </>
 
   );
 };

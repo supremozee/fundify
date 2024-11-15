@@ -2,6 +2,7 @@ import ExplorerSVG from "../assets/ExplorerSVG";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const TopBar2 = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +16,7 @@ const TopBar2 = () => {
       <div className="flex justify-between items-center mx-14">
         <div className="font-bold text-lg flex justify-center items-center">
           <ExplorerSVG />
-          <span className="ml-2 text-md font-medium">Explorer</span>
+          <Link to="/explorer" className="ml-2 text-md font-medium">Explorer</Link>
         </div>
         <div className="flex justify-center items-center gap-4">
           <div className="font-bold">
