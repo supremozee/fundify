@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { z } from 'zod';
 import Web3 from 'web3';
-import TopBar from './src/components/TopBar';
+// import TopBar from './src/components/TopBar';
 import Navbar from './src/components/Navbar';
 import proposalVotingABI from './proposalVoting.json';
+import TopBar2 from './src/components/TopBar2';
 
 const CREATE_PROPOSAL_MUTATION = gql`
   mutation CreateProposal($input: CreateProposalInput!) {
@@ -62,14 +63,15 @@ const CreateProposalPage = () => {
     } else {
       setErrors({});
       try {
-        if (typeof window.ethereum === 'undefined') {
-          console.error('MetaMask is not installed.');
+        const taikoHelkaRpcUrl = 'https://rpc.hekla.taiko.xyz'; // Replace with the actual RPC URL for Taiko Helka
+        const web3 = new Web3(new Web3.providers.HttpProvider(taikoHelkaRpcUrl));
+
+        const accounts = await web3.eth.getAccounts();
+        if (accounts.length === 0) {
+          console.error('No accounts found. Please ensure your wallet is connected.');
           return;
         }
 
-        const web3 = new Web3(window.ethereum);
-        await window.ethereum.enable();
-        const accounts = await web3.eth.getAccounts();
         const contractAddress = '0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA';
         const contract = new web3.eth.Contract(proposalVotingABI.abi, contractAddress);
 
@@ -105,7 +107,7 @@ const CreateProposalPage = () => {
 
   return (
     <>
-      <TopBar />
+      <TopBar2 />
       <Navbar />
       <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
         <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
@@ -189,7 +191,7 @@ const CreateProposalPage = () => {
                 type="submit"
                 className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
               >
-                Submit
+                Create Proposal
               </button>
             </div>
           </form>
