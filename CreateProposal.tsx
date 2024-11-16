@@ -1,50 +1,43 @@
-import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
-import { z } from 'zod';
-import Web3 from 'web3';
+import React, { useState } from "react";
+import { z } from "zod";
+import { simulateContract, writeContract, getAccount } from "@wagmi/core";
+import { config } from "./src/wagmi";
+import { parseEther } from "viem";
 // import TopBar from './src/components/TopBar';
-import Navbar from './src/components/Navbar';
-import proposalVotingABI from './proposalVoting.json';
-import TopBar2 from './src/components/TopBar2';
-
-const CREATE_PROPOSAL_MUTATION = gql`
-  mutation CreateProposal($input: CreateProposalInput!) {
-    createProposal(input: $input) {
-      id
-      title
-      duration
-      description
-      category
-      fundingTarget
-    }
-  }
-`;
+import Navbar from "./src/components/Navbar";
+import proposalVotingABI from "./ProposalVoting.json";
+import TopBar2 from "./src/components/TopBar2";
 
 const proposalSchema = z.object({
-  title: z.string().min(1, 'Proposal name is required'),
-  description: z.string().min(1, 'Project description is required'),
-  duration: z.string().min(1, 'Duration is required'),
-  category: z.string().min(1, 'Category is required'),
-  fundingTarget: z.string().min(1, 'Target amount is required'),
+  title: z.string().min(1, "Proposal name is required"),
+  description: z.string().min(1, "Project description is required"),
+  duration: z.string().min(1, "Duration is required"),
+  category: z.string().min(1, "Category is required"),
+  fundingTarget: z.string().min(1, "Target amount is required"),
 });
 
 type ProposalFormData = z.infer<typeof proposalSchema>;
 
 const CreateProposalPage = () => {
+  const { connector } = getAccount(config);
+
   const [formData, setFormData] = useState<ProposalFormData>({
-    title: '',
-    description: '',
-    duration: '',
-    category: '',
-    fundingTarget: '',
+    title: "",
+    description: "",
+    duration: "",
+    category: "",
+    fundingTarget: "",
   });
 
   const [errors, setErrors] = useState<Partial<ProposalFormData>>({});
-  const [createProposal] = useMutation(CREATE_PROPOSAL_MUTATION);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    if (name === 'fundingTarget' && isNaN(Number(value))) return;
+    if (name === "fundingTarget" && isNaN(Number(value))) return;
     setFormData({ ...formData, [name]: value });
   };
 
@@ -63,44 +56,36 @@ const CreateProposalPage = () => {
     } else {
       setErrors({});
       try {
-        const taikoHelkaRpcUrl = 'https://rpc.hekla.taiko.xyz'; // Replace with the actual RPC URL for Taiko Helka
-        const web3 = new Web3(new Web3.providers.HttpProvider(taikoHelkaRpcUrl));
-
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length === 0) {
-          console.error('No accounts found. Please ensure your wallet is connected.');
-          return;
-        }
-
-        const contractAddress = '0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA';
-        const contract = new web3.eth.Contract(proposalVotingABI.abi, contractAddress);
+        const contractAddress = "0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA";
 
         const category = parseInt(formData.category, 10); // Convert category to integer
         const duration = parseInt(formData.duration, 10); // Convert duration to integer
-        const amount = web3.utils.toWei(formData.fundingTarget, 'ether');
+        const amount = parseEther(formData.fundingTarget);
 
-        const tx = await contract.methods.createProposal(
-          formData.title,
-          formData.description,
-          duration,
-          category,
-          amount
-        ).send({ from: accounts[0] });
-
-        console.log('Transaction successful:', tx);
-
-        const response = await createProposal({
-          variables: {
-            input: formData,
-          },
+        const { request } = await simulateContract(config, {
+          abi: proposalVotingABI.abi,
+          address: contractAddress,
+          functionName: "createProposal",
+          args: [
+            formData.title,
+            formData.description,
+            duration,
+            category,
+            amount,
+          ],
+          connector,
         });
-        if (!response || response.errors) {
-          console.error('GraphQL mutation error:', response.errors || 'Unknown error');
-          return;
-        }
-        console.log('Form submitted:', response.data);
+
+        const hash = await writeContract(config, request);
+
+        console.log("Transaction successful, hash:", hash);
+
       } catch (error) {
-        console.error('Error submitting form:', error);
+        console.log(
+          "Error creating proposal",
+          error
+        );
+        alert(error);
       }
     }
   };
@@ -114,7 +99,10 @@ const CreateProposalPage = () => {
           <h1 className="text-2xl font-bold mb-4">Create Proposal</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Proposal Name
               </label>
               <input
@@ -125,10 +113,15 @@ const CreateProposalPage = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
-              {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+              )}
             </div>
             <div className="mb-4">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Project Description
               </label>
               <textarea
@@ -138,10 +131,17 @@ const CreateProposalPage = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
-              {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description}
+                </p>
+              )}
             </div>
             <div className="mb-4">
-              <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="duration"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Duration (in seconds)
               </label>
               <input
@@ -152,10 +152,15 @@ const CreateProposalPage = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
-              {errors.duration && <p className="text-red-500 text-sm mt-1">{errors.duration}</p>}
+              {errors.duration && (
+                <p className="text-red-500 text-sm mt-1">{errors.duration}</p>
+              )}
             </div>
             <div className="mb-4">
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Category
               </label>
               <select
@@ -170,10 +175,15 @@ const CreateProposalPage = () => {
                 <option value="1">Research</option>
                 <option value="2">Marketing</option>
               </select>
-              {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+              {errors.category && (
+                <p className="text-red-500 text-sm mt-1">{errors.category}</p>
+              )}
             </div>
             <div className="mb-4">
-              <label htmlFor="fundingTarget" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="fundingTarget"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Target Amount
               </label>
               <input
@@ -184,7 +194,11 @@ const CreateProposalPage = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
-              {errors.fundingTarget && <p className="text-red-500 text-sm mt-1">{errors.fundingTarget}</p>}
+              {errors.fundingTarget && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.fundingTarget}
+                </p>
+              )}
             </div>
             <div className="flex justify-between">
               <button
