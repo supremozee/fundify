@@ -3,7 +3,6 @@ import { z } from "zod";
 import { simulateContract, writeContract, getAccount } from "@wagmi/core";
 import { config } from "./src/wagmi";
 import { parseEther } from "viem";
-// import TopBar from './src/components/TopBar';
 import Navbar from "./src/components/Navbar";
 import proposalVotingABI from "./ProposalVoting.json";
 import TopBar2 from "./src/components/TopBar2";
@@ -30,6 +29,8 @@ const CreateProposalPage = () => {
   });
 
   const [errors, setErrors] = useState<Partial<ProposalFormData>>({});
+  const [loading, setLoading] = useState(false); // Spinner state
+  const [successMessage, setSuccessMessage] = useState(""); // Success message state
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -41,54 +42,66 @@ const CreateProposalPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = proposalSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors = result.error.format();
-      setErrors({
-        title: fieldErrors.title?._errors[0],
-        description: fieldErrors.description?._errors[0],
-        duration: fieldErrors.duration?._errors[0],
-        category: fieldErrors.category?._errors[0],
-        fundingTarget: fieldErrors.fundingTarget?._errors[0],
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true); // Show spinner
+  setSuccessMessage(""); // Clear any previous success message
+  const result = proposalSchema.safeParse(formData);
+  if (!result.success) {
+    const fieldErrors = result.error.format();
+    setErrors({
+      title: fieldErrors.title?._errors[0],
+      description: fieldErrors.description?._errors[0],
+      duration: fieldErrors.duration?._errors[0],
+      category: fieldErrors.category?._errors[0],
+      fundingTarget: fieldErrors.fundingTarget?._errors[0],
+    });
+    setLoading(false); // Hide spinner
+  } else {
+    setErrors({});
+    try {
+      const contractAddress = "0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA";
+
+      const category = parseInt(formData.category, 10); // Convert category to integer
+      const duration = parseInt(formData.duration, 10); // Convert duration to integer
+      const amount = parseEther(formData.fundingTarget);
+
+      const { request } = await simulateContract(config, {
+        abi: proposalVotingABI.abi,
+        address: contractAddress,
+        functionName: "createProposal",
+        args: [
+          formData.title,
+          formData.description,
+          duration,
+          category,
+          amount,
+        ],
+        connector,
       });
-    } else {
-      setErrors({});
-      try {
-        const contractAddress = "0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA";
 
-        const category = parseInt(formData.category, 10); // Convert category to integer
-        const duration = parseInt(formData.duration, 10); // Convert duration to integer
-        const amount = parseEther(formData.fundingTarget);
+      const hash = await writeContract(config, request);
 
-        const { request } = await simulateContract(config, {
-          abi: proposalVotingABI.abi,
-          address: contractAddress,
-          functionName: "createProposal",
-          args: [
-            formData.title,
-            formData.description,
-            duration,
-            category,
-            amount,
-          ],
-          connector,
-        });
+      console.log("Transaction successful, hash:", hash);
+      setSuccessMessage("Proposal submitted successfully!"); // Set success message
 
-        const hash = await writeContract(config, request);
-
-        console.log("Transaction successful, hash:", hash);
-
-      } catch (error) {
-        console.log(
-          "Error creating proposal",
-          error
-        );
-        alert(error);
-      }
+      // Reset form fields
+      setFormData({
+        title: "",
+        description: "",
+        duration: "",
+        category: "",
+        fundingTarget: "",
+      });
+    } catch (error) {
+      console.log("Error creating proposal", error);
+      alert(error);
+    } finally {
+      setLoading(false); // Hide spinner
     }
-  };
+  }
+};
+
 
   return (
     <>
@@ -184,7 +197,7 @@ const CreateProposalPage = () => {
                 htmlFor="fundingTarget"
                 className="block text-sm font-medium text-gray-700"
               >
-                Target Amount
+                Target Amount (in ETH)
               </label>
               <input
                 type="text"
@@ -200,15 +213,21 @@ const CreateProposalPage = () => {
                 </p>
               )}
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <button
                 type="submit"
-                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+                className={`bg-green-500 text-white py-2 px-4 rounded-md ${
+                  loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"
+                }`}
+                disabled={loading}
               >
-                Create Proposal
+                {loading ? "Submitting..." : "Create Proposal"}
               </button>
             </div>
           </form>
+          {successMessage && (
+            <p className="text-green-500 text-sm mt-4">{successMessage}</p>
+          )}
         </div>
       </div>
     </>
