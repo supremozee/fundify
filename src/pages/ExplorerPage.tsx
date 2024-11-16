@@ -1,5 +1,5 @@
 import { useState } from "react";
-import StatsCard from "../components/StatsCarrd";
+// import StatsCard from "../components/StatsCarrd";
 import ExplorerHomeTab from "../components/ExplorerHomeTab";
 import TopBar2 from "../components/TopBar2";
 
@@ -89,14 +89,6 @@ const ExplorerPage = () => {
   return (
     <div className="bg-teal-300">
       <TopBar2 />
-      <div className="mx-16 flex justify-between items-center py-10">
-        <StatsCard />
-        <div className="p-6">
-          <p className="text-8xl text-white">Fund What Matters</p>
-          <p className="text-8xl text-black">Fund What Matters</p>
-          <p className="text-8xl text-gray-500">Fund What Matters</p>
-        </div>
-      </div>
       <div className=" mx-16 p-2">
         <nav className="flex space-x-1">
           {tabs.map((tab) => (
@@ -119,6 +111,8 @@ const ExplorerPage = () => {
         <div className="border-b-4 border-white -mt-1 flex" />
       </div>
       {activeTab === "home" && <ExplorerHomeTab projects={mockProjects}  />}
+      {activeTab === "rounds" && <ExplorerHomeTab projects={mockProjects}  />}
+      {activeTab === "projects" && <ExplorerHomeTab projects={mockProjects}  />}
     </div>
   );
 };

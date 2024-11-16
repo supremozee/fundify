@@ -46,26 +46,27 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
           {/* Footer */}
           <div className="mt-auto">
-            <div className="bg-teal-100 text-teal-700 inline-block px-3 py-1 rounded-full text-xs font-medium mb-3">
-              {project.status}
-            </div>
-
-            <div
-              className={`flex justify-between items-center text-xs ${
-                isQuantum ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                <span>{project.projectCount} Projects</span>
-                <span>•</span>
-                <span>{project.fundingAmount} USDC match</span>
+              <div className="bg-teal-100 text-teal-700 inline-block px-3 py-1 rounded-full text-xs font-medium mb-3">
+                {project.status}
               </div>
-              <ArrowRightCircle
-                className={`w-4 h-4 ${
+
+              <div
+                className={`flex justify-between items-center text-xs ${
                   isQuantum ? "text-gray-300" : "text-gray-600"
                 }`}
-              />
-            </div>
+              >
+                <div className="flex items-center space-x-2">
+                  <span>{project.projectCount} Projects</span>
+                  <span>•</span>
+                  <span>{project.fundingAmount} USDC match</span>
+                </div>
+                <ArrowRightCircle
+                  className={`w-4 h-4 ${
+                    isQuantum ? "text-gray-300" : "text-gray-600"
+                  }`}
+                />
+              </div>
+              
           </div>
         </div>
     </Link>
@@ -82,12 +83,12 @@ const ExplorerHomeTab = ({ projects }: { projects: Project[] }) => {
   return (
     <div className="min-h-screen p-6">
       <div className="flex justify-between items-center mx-28 mb-8">
-        <h1 className="text-xl font-medium">Donate Now</h1>
-        <button className="text-sm">View All</button>
+        {/* <h1 className="text-xl font-medium">Donate Now</h1> */}
+        {/* <button className="text-sm">View All</button> */}
       </div>
       <div className="max-w-7xl mx-auto space-y-4">
         {pairs.map((pair, pairIndex) => (
-          <div key={pairIndex} className="grid grid-cols-12 gap-4">
+          <div key={pairIndex} className="grid grid-cols-4 gap-4">
             {pair.map((project, index) => (
               <div
                 key={project.id}

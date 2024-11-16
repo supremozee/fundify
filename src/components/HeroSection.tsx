@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const HeroSection = () => {
   return (
     <div className="h-[84vh] flex mx-16">
@@ -18,9 +20,9 @@ const HeroSection = () => {
               Software Program and rounds from our Community
             </p>
             <div className="flex justify-around items-center mt-4">
-              <button className="bg-blue-900 text-white px-6 py-2 shadow-md rounded-sm">
+              <Link to={'/explorer'} className="bg-blue-900 text-white px-6 py-2 shadow-md rounded-sm">
                 Donate
-              </button>
+              </Link>
               <button>Learn More</button>
             </div>
           </div>
