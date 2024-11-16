@@ -18,7 +18,7 @@ const generateDummyProposals = (count: number): Proposal[] => {
       proposalName: `Proposal ${i}`,
       projectDescription: `This is a description for proposal ${i}. It is a very detailed description that might be too long to display in full. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`,
       motivation: `Motivation for proposal ${i}. Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-      targetAmount: `${Math.floor(Math.random() * 1000) + 100} USDC`,
+      targetAmount: `${Math.floor(Math.random() * 1000) + 100} ETH`,
     });
   }
   return dummyProposals;
@@ -73,7 +73,7 @@ const ProposalsPage: React.FC = () => {
                 </button>
               </p>
               <p className="text-gray-700 mb-2">{proposal.motivation}</p>
-              <p className="text-gray-700 mb-2">Target Amount: {proposal.targetAmount}</p>
+              <p className="text-gray-700 mb-2">Target Amount: <span className='font-bold text-[32px]'>{proposal.targetAmount}</span></p>
               <div className="flex justify-between items-center">
                 <textarea
                   value={comment[proposal.id] || ''}
