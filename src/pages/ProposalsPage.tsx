@@ -7,7 +7,7 @@ import { parseEther } from "viem";
 import { config } from "../wagmi";
 // import ProposalVotingData from "../../ProposalVoting.json";
 import FundingContractData from "../../Funding.json";
-
+import { Link } from "react-router-dom";
 type Proposal = {
   proposalId: number;
   proposalName: string;
@@ -140,12 +140,12 @@ const ProposalsPage: React.FC = () => {
       <TopBar />
       <div className="min-h-screen p-6 bg-gray-100">
         <h1 className="text-2xl font-bold mb-6">Proposals</h1>
-        <button
-          type="submit"
+        <Link
+          to="/create-proposal"
           className={`bg-green-500 text-white py-2 px-4 rounded-md ${"hover:bg-green-600"}`}
         >
           {"Create Proposal"}
-        </button>
+        </Link>
         <div className="flex flex-wrap items-center gap-5 justify-center w-full">
           {proposals.map((proposal) => (
             <div
