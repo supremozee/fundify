@@ -1,31 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaPaperPlane } from "react-icons/fa";
-import TopBar from "../components/TopBar";
 import { GraphQLClient } from "graphql-request";
 import { simulateContract, writeContract, getAccount } from "@wagmi/core";
 import { parseEther } from "viem";
 import { config } from "../wagmi";
 import ProposalVotingData from "../../ProposalVoting.json";
 import FundingContractData from "../../Funding.json";
+import TopBar2 from "../components/TopBar2";
+import Web3 from "web3";
+import { Link } from "react-router-dom";
 
 type Proposal = {
   proposalId: number;
-  proposalName: string;
-  projectDescription: string;
-  targetAmount: string;
-};
-
-const generateDummyProposals = (count: number): Proposal[] => {
-  const dummyProposals: Proposal[] = [];
-  for (let i = 1; i <= count; i++) {
-    dummyProposals.push({
-      proposalId: i,
-      proposalName: `Proposal ${i}`,
-      projectDescription: `This is a description for proposal ${i}. It is a very detailed description that might be too long to display in full. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`,
-      targetAmount: `${Math.floor(Math.random() * 5) + 1} ETH`,
-    });
-  }
-  return dummyProposals;
+  title: string;
+  description: string;
+  fundingTarget: string;
+  deadline: string;
 };
 
 const PROPOSAL_API =
@@ -46,57 +36,38 @@ const query = `
   }
 `;
 
-client
-  .request(query)
-  .then((data) => console.log(data))
-  .catch((err) => console.error(err));
-
-const proposals = generateDummyProposals(10);
-
-const { connector } = getAccount(config);
-
-// CA--->Contract Address
-const voteOnProposal = async (proposalId: number) => {
-  const proposalVotingCA = "0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA";
-
-  const { request } = await simulateContract(config, {
-    abi: ProposalVotingData.abi,
-    address: proposalVotingCA,
-    functionName: "voteOnProposal",
-    args: [proposalId],
-    connector,
-  });
-
-  const hash = await writeContract(config, request);
-
-  console.log("Proposal Voting successful, hash:", hash);
-};
-
-const fundProposal = async (proposalId: number, value: string) => {
-  const fundingCA = "0x46475389Db0b2CdC1bf3cd6631e896594aaeCe4e";
-
-  const { request } = await simulateContract(config, {
-    abi: FundingContractData.abi,
-    address: fundingCA,
-    functionName: "fundProposal",
-    args: [proposalId],
-    value: parseEther(value),
-    connector,
-  });
-
-  const hash = await writeContract(config, request);
-
-  // console.log("Proposal Funding successful, hash:", hash);
-  alert(`Proposal funded successfully, hash: ${hash}`);
-};
-
 const ProposalsPage: React.FC = () => {
+  const [proposals, setProposals] = useState<Proposal[]>([]);
   const [showMore, setShowMore] = useState<{ [key: string]: boolean }>({});
-  const [showFundModal, setShowFundModal] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const [showFundModal, setShowFundModal] = useState<{ [key: string]: boolean }>({});
   const [comment, setComment] = useState<{ [key: string]: string }>({});
   const [fundAmount, setFundAmount] = useState<{ [key: string]: string }>({});
+  const { connector } = getAccount(config);
+  // const web3 = new Web3(Web3.givenProvider);
+
+  useEffect(() => {
+    client
+      .request(query)
+      .then((data) => {
+        type ProposalCreated = {
+          proposalId: string;
+          title: string;
+          description: string;
+          fundingTarget: string;
+          deadline: string;
+        };
+
+        const fetchedProposals = (data as { proposalCreateds: ProposalCreated[] }).proposalCreateds.map((proposal: ProposalCreated) => ({
+          proposalId: parseInt(proposal.proposalId, 10),
+          title: proposal.title,
+          description: proposal.description,
+          fundingTarget: proposal.fundingTarget,
+          deadline: proposal.deadline,
+        }));
+        setProposals(fetchedProposals);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleShowMore = (proposalId: number) => {
     setShowMore((prev) => ({ ...prev, [proposalId]: !prev[proposalId] }));
@@ -115,17 +86,63 @@ const ProposalsPage: React.FC = () => {
   };
 
   const handleFundSubmit = (proposalId: number) => {
-    // Handle vote submission
     console.log(`Funded ${fundAmount[proposalId]} on proposal ${proposalId}`);
     fundProposal(proposalId, fundAmount[proposalId]);
     setShowFundModal((prev) => ({ ...prev, [proposalId]: false }));
   };
 
+  const voteOnProposal = async (proposalId: number) => {
+    const proposalVotingCA = "0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA";
+
+    try {
+      const { request } = await simulateContract(config, {
+        abi: ProposalVotingData.abi,
+        address: proposalVotingCA,
+        functionName: "voteOnProposal",
+        args: [proposalId],
+        connector,
+      });
+
+      const hash = await writeContract(config, request);
+
+      console.log("Proposal Voting successful, hash:", hash);
+      alert("You have successfully voted on the proposal.");
+    } catch (error) {
+      console.error("Error voting on proposal:", error);
+      alert("You do not have enough tokens to vote on this proposal.");
+    }
+  };
+
+  const fundProposal = async (proposalId: number, value: string) => {
+    const fundingCA = "0x46475389Db0b2CdC1bf3cd6631e896594aaeCe4e";
+
+    try {
+      const { request } = await simulateContract(config, {
+        abi: FundingContractData.abi,
+        address: fundingCA,
+        functionName: "fundProposal",
+        args: [proposalId],
+        value: parseEther(value),
+        connector,
+      });
+
+      const hash = await writeContract(config, request);
+
+      alert(`Proposal funded successfully, hash: ${hash}`);
+    } catch (error) {
+      console.error("Error funding proposal:", error);
+      alert("There was an error funding the proposal.");
+    }
+  };
+
   return (
     <>
-      <TopBar />
-      <div className="min-h-screen p-6 bg-gray-100">
+      <TopBar2 />
+      <div className="min-h-screen p-6 bg-gray-100 flex flex-col gap-5">
         <h1 className="text-2xl font-bold mb-6">Proposals</h1>
+        <Link to="/create-proposal" className="bg-blue-900  text-white px-6 py-2 w-40 shadow-md rounded-sm">
+        Create Proposal
+        </Link>
         <div className="flex flex-wrap items-center gap-5 justify-center w-full">
           {proposals.map((proposal) => (
             <div
@@ -133,12 +150,12 @@ const ProposalsPage: React.FC = () => {
               className="bg-white p-10 rounded-lg shadow-md relative w-[400px] h-auto"
             >
               <h2 className="text-xl font-bold mb-2">
-                {proposal.proposalName}
+                {proposal.title}
               </h2>
               <p className="text-gray-700 mb-2">
                 {showMore[proposal.proposalId]
-                  ? proposal.projectDescription
-                  : `${proposal.projectDescription.slice(0, 100)}...`}
+                  ? proposal.description
+                  : `${proposal.description.slice(0, 100)}...`}
                 <button
                   onClick={() => handleShowMore(proposal.proposalId)}
                   className="text-blue-500 ml-2"
@@ -149,7 +166,7 @@ const ProposalsPage: React.FC = () => {
               <p className="text-gray-700 mb-2">
                 Target Amount:{" "}
                 <span className="font-bold text-[32px]">
-                  {proposal.targetAmount}
+                  {Web3.utils.fromWei(proposal.fundingTarget, 'ether')} ETH
                 </span>
               </p>
               <div className="flex justify-between items-center">

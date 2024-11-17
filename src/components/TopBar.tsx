@@ -9,7 +9,7 @@ const TopBar = () => {
       </div>
       <div className="font-bold">
         <a
-          href="/explorer"
+          href="/create-proposal"
           className="hover:underline flex justify-center items-center gap-1"
         >
           Explore <MoveRight size={14} />

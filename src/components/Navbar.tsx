@@ -2,13 +2,14 @@ import { ChevronDown } from "lucide-react";
 import GetFundingDropdown from "./GetFundingDropdown";
 import DonationDropdown from "./DonationDropdown";
 import AboutDropDown from "./AboutDropDown";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <nav className="mx-14 p-4">
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center gap-8">
-          <div className="text-2xl font-bold gradient-text">FUNDIFY</div>
+          <Link to={'/'} className="text-2xl font-bold gradient-text">FUNDIFY</Link>
           <ul className="flex space-x-8">
             <li className="relative group">
               <button className="hover:text-gray-200 flex justify-center items-center gap-1">
