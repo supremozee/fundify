@@ -5,7 +5,7 @@ import { GraphQLClient } from "graphql-request";
 import { simulateContract, writeContract, getAccount } from "@wagmi/core";
 import { parseEther } from "viem";
 import { config } from "../wagmi";
-import ProposalVotingData from "../../ProposalVoting.json";
+// import ProposalVotingData from "../../ProposalVoting.json";
 import FundingContractData from "../../Funding.json";
 
 type Proposal = {
@@ -57,6 +57,7 @@ const { connector } = getAccount(config);
 
 // CA--->Contract Address
 const voteOnProposal = async (proposalId: number) => {
+  /*
   const proposalVotingCA = "0x5C0cB0c0826AD6B4E85eFAd9e1eA8c94fed152DA";
 
   const { request } = await simulateContract(config, {
@@ -64,6 +65,19 @@ const voteOnProposal = async (proposalId: number) => {
     address: proposalVotingCA,
     functionName: "voteOnProposal",
     args: [proposalId],
+    connector,
+  });
+
+  const hash = await writeContract(config, request);*/
+
+  const fundingCA = "0x46475389Db0b2CdC1bf3cd6631e896594aaeCe4e";
+
+  const { request } = await simulateContract(config, {
+    abi: FundingContractData.abi,
+    address: fundingCA,
+    functionName: "fundProposal",
+    args: [proposalId],
+    value: parseEther("0.000"),
     connector,
   });
 
@@ -126,6 +140,12 @@ const ProposalsPage: React.FC = () => {
       <TopBar />
       <div className="min-h-screen p-6 bg-gray-100">
         <h1 className="text-2xl font-bold mb-6">Proposals</h1>
+        <button
+          type="submit"
+          className={`bg-green-500 text-white py-2 px-4 rounded-md ${"hover:bg-green-600"}`}
+        >
+          {"Create Proposal"}
+        </button>
         <div className="flex flex-wrap items-center gap-5 justify-center w-full">
           {proposals.map((proposal) => (
             <div

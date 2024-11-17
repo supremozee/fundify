@@ -20,7 +20,7 @@ const HeroSection = () => {
               Software Program and rounds from our Community
             </p>
             <div className="flex justify-around items-center mt-4">
-              <Link to={'/explorer'} className="bg-blue-900 text-white px-6 py-2 shadow-md rounded-sm">
+              <Link to={'/proposals'} className="bg-blue-900 text-white px-6 py-2 shadow-md rounded-sm">
                 Donate
               </Link>
               <button>Learn More</button>
