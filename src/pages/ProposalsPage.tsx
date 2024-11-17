@@ -186,13 +186,13 @@ const ProposalsPage: React.FC = () => {
 
               <button
                 onClick={() => voteOnProposal(proposal.proposalId)}
-                className="bg-blue-900 text-white py-2 px-10 mt-5 rounded-md hover:bg-blue-600"
+                className="bg-gray-900 text-white py-2 px-10 mt-5 rounded-md hover:bg-blue-600"
               >
                 Vote
               </button>
               <button
                 onClick={() => handleFundBtnClick(proposal.proposalId)}
-                className="bg-blue-500 text-white py-2 px-10 mt-5 ml-5 rounded-md hover:bg-blue-600"
+                className="bg-red-500 text-white py-2 px-10 mt-5 ml-5 rounded-md hover:bg-blue-600"
               >
                 Fund
               </button>
