@@ -1,20 +1,15 @@
-// src/Dashboard.tsx
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { TbEyeUp } from 'react-icons/tb';
 import ProjectCard from '../components/ProjectCard';
-// import TopBar2 from '../components/TopBar2';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-// import { useAccount } from 'wagmi';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard: React.FC = () => {
-  // const { isConnected } = useAccount();
-
   const data = {
     labels: ['Government tokens', 'Proposals submitted', 'Vote casts', 'Projects funded'],
     datasets: [
@@ -42,10 +37,10 @@ const Dashboard: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col gap-[110px] justify-center items-start space-x-8 p-[96px] bg-gray-50 min-h-screen">
-        <section className='flex w-full items-center justify-center'>
-          <div className="relative w-full h-40 flex ">
-            <div className="space-y-6 flex flex-col justify-center text-gray-700 text-sm">
+      <div className="flex flex-col gap-8 md:gap-[110px] justify-center items-start p-4 md:p-[96px] bg-gray-50 min-h-screen">
+        <section className='flex flex-col md:flex-row w-full items-center justify-center'>
+          <div className="relative w-full md:w-1/2 h-40 flex flex-col md:flex-row">
+            <div className="space-y-2 md:space-y-6 flex flex-col justify-center text-gray-700 text-sm">
               <div><span className="inline-block w-3 h-3 mr-2 rounded-full bg-[#1BA098]"></span>Government tokens</div>
               <div><span className="inline-block w-3 h-3 mr-2 rounded-full bg-[#7CD555]"></span>Proposals submitted</div>
               <div><span className="inline-block w-3 h-3 mr-2 rounded-full bg-[#C62898]"></span>Vote casts</div>
@@ -59,10 +54,9 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="border rounded-lg p-4 text-center w-[506px] h-[247px] bg-white shadow-md">
+          <div className="space-y-4 mt-4 md:mt-0 md:ml-8">
+            <div className="border rounded-lg p-4 text-center w-full md:w-[506px] h-[247px] bg-white shadow-md">
               <p className="text-[#9E9E9E] text-sm italic flex w-full justify-center items-center">Current balance <span className='ml-1'><TbEyeUp size={10} /></span></p> 
-              {/* <p className="text-2xl font-bold mt-1">$2,77,345.00</p> */}
               <div className="flex justify-center mt-[63px] space-x-2">
                 <ConnectButton
                   accountStatus={{
@@ -73,7 +67,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex space-x-4 mt-4 justify-center gap-16">
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-4 justify-center gap-4 md:gap-16">
               <Link to={'/create-proposal'} className="bg-[#1E3A8A] text-white py-2 px-4 rounded-md text-[17px]">Submit a proposal</Link>
               <Link to={'/proposals'} className="text-[#1E3A8A] text-[17px]">View active proposals</Link>
             </div>
@@ -84,7 +78,7 @@ const Dashboard: React.FC = () => {
             <h2 className="text-[#2D2B2B] font-[400] text-[23px]">Proposals</h2>
             <a href="#" className="text-[#1E3A8A] underline text-[18px] ">View all</a>
           </div>
-          <div className="flex space-x-24">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-24">
             {proposalsData.map((proposal, index) => (
               <ProjectCard
                 key={index}
@@ -99,13 +93,12 @@ const Dashboard: React.FC = () => {
           </div>
         </section>
 
-        {/* Supported Proposals Section */}
         <section className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-[#2D2B2B] font-[400] text-[23px]">Supported proposals</h2>
             <a href="#" className="text-[#1E3A8A] underline text-[18px]  ">View all</a>
           </div>
-          <div className="flex space-x-24">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-24">
             {proposalsData.slice(0, 3).map((proposal, index) => (
               <ProjectCard
                 key={index}
