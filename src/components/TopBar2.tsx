@@ -16,7 +16,7 @@ const TopBar2 = () => {
       <div className="flex justify-between items-center mx-14">
         <div className="font-bold text-lg flex justify-center items-center">
           <ExplorerSVG />
-          <Link to="/create-proposal" className="ml-2 text-md font-medium">Explore</Link>
+          <Link to="/proposals" className="ml-2 text-md font-medium">Explore</Link>
         </div>
         <div className="flex justify-center items-center gap-4">
           <div className="font-bold">
