@@ -7,6 +7,7 @@ import ExplorerSlug from "./components/ExplorerSlug";
 import Dashboard from "./pages/Dashboard";
 import CreateProposalPage from "../CreateProposal";
 import ProposalsPage from "./pages/ProposalsPage";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/proposals" element={<ProposalsPage/>} />
         <Route path="/create-proposal" element={<CreateProposalPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
